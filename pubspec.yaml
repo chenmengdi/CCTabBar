@@ -1,7 +1,6 @@
 name: cc_tab
 description: Click the menu, scroll the corresponding position of the page, and scroll the page.
 version: 0.0.1
-author: 1599126082@qq.com
 homepage: https://github.com/chenmengdi/CCTabBar.git
 
 environment:
