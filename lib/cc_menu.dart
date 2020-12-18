@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cc_tab/cc_tabBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +62,7 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
+    initData();
   }
 
   initData() {
@@ -115,8 +118,6 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      width: double.infinity,
-      height: double.infinity,
       color: _getBackgroundColor(),
       child: Column(
         children: [
@@ -142,25 +143,28 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
               }
             },
           ),
-          Expanded(
-              child: EasyRefresh(
-                onRefresh: () async {
-                   if(widget.onRefresh != null){
-                     widget.onRefresh();
-                   }
-                },
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
-                    children: [
-                      _getHeaderWidget(),
-                      _getListWidget(),
-                      _getBottomWidget()
-                    ],
-                  ),
+          Expanded(child: Container(
+            height: MediaQuery.of(context).size.height -
+                _headerHeight -
+                MediaQueryData.fromWindow(window).padding.top,
+            child: EasyRefresh(
+              onRefresh: () async {
+                if(widget.onRefresh != null){
+                  widget.onRefresh();
+                }
+              },
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Column(
+                  children: [
+                    _getHeaderWidget(),
+                    _getListWidget(),
+                    _getBottomWidget()
+                  ],
                 ),
-              )
-          )
+              ),
+            ),
+          ))
         ],
       ),
     );

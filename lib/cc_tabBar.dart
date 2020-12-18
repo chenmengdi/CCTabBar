@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CCTabBar extends StatefulWidget {
   @required final List<String> menuList;
@@ -40,7 +39,7 @@ class CCTabBarState extends State<CCTabBar> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-        height: ScreenUtil().setWidth(56),
+        height: 30,
         width: double.infinity,
         color: Colors.white,
         child: TabBar(
@@ -49,16 +48,16 @@ class CCTabBarState extends State<CCTabBar> with TickerProviderStateMixin {
               widget.onTap(index);
             }
           },
-          isScrollable: widget.isScrollable,
+          isScrollable: _getIsScrollable(),
           controller: widget.controller,
           labelColor: _getLabelColor(),
           labelStyle: _getLabelStyle(),
           unselectedLabelColor: _getUnselectedLabelColor(),
           unselectedLabelStyle: _getUnselectedLabelStyle(),
           indicatorColor: _getIndicatorColor(),
-          indicatorSize: widget.indicatorSize,
-          indicatorWeight: widget.indicatorWeight,
-          indicatorPadding: widget.indicatorPadding,
+          indicatorSize: _getIndicatorSize(),
+          indicatorWeight: _getIndicatorWeight(),
+          indicatorPadding: _getIndicatorPadding(),
           tabs: _getMenuList(),
         ));
   }
@@ -77,7 +76,7 @@ class CCTabBarState extends State<CCTabBar> with TickerProviderStateMixin {
       return widget.labelStyle;
     }
     return TextStyle(
-        fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18));
+        fontWeight: FontWeight.w600, fontSize: 18);
   }
 
   ///设置未选中时的字体样式
@@ -86,7 +85,7 @@ class CCTabBarState extends State<CCTabBar> with TickerProviderStateMixin {
       return widget.unselectedLabelStyle;
     }
     return TextStyle(
-        fontWeight: FontWeight.w400, fontSize: ScreenUtil().setSp(16));
+        fontWeight: FontWeight.w400, fontSize: 16);
   }
 
   ///设置未选中时的字体颜色
@@ -104,6 +103,36 @@ class CCTabBarState extends State<CCTabBar> with TickerProviderStateMixin {
     }
     return Color(0xFF724AE8);
   }
+
+  bool _getIsScrollable(){
+    if (widget.isScrollable != null){
+      return widget.isScrollable;
+    }
+    return true;
+  }
+
+  TabBarIndicatorSize _getIndicatorSize(){
+    if (widget.indicatorSize != null){
+      return widget.indicatorSize;
+    }
+    return TabBarIndicatorSize.tab;
+  }
+
+  double _getIndicatorWeight(){
+    if (widget.indicatorWeight != null){
+      return widget.indicatorWeight;
+    }
+    return 2.0;
+  }
+
+  EdgeInsetsGeometry _getIndicatorPadding(){
+    if (widget.indicatorPadding != null){
+      return widget.indicatorPadding;
+    }
+    return EdgeInsets.zero;
+  }
+
+
 
   List<Widget> _getMenuList() {
     List<Widget> menuWidgetList = [];

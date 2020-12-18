@@ -1,6 +1,5 @@
 import 'package:cc_tab/cc_menu.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
       itemBuilder: (BuildContext context,int index){
         return Container(
           width: double.infinity,
-          height: ScreenUtil().setWidth(500),
+          height: 300,
           color: colorList[index % colorList.length],
         );
       },
