@@ -1,6 +1,6 @@
-name: cc_tab
+name: link_scroll_menu
 description: Click the menu, scroll the corresponding position of the page, and scroll the page.
-version: 0.0.2
+version: 0.0.5
 homepage: https://github.com/chenmengdi/CCTabBar.git
 
 environment:
@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_easyrefresh: ^2.1.1
+  flutter_easyrefresh: ^2.1.7
 
 dev_dependencies:
   flutter_test:
