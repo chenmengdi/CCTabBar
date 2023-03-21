@@ -4,14 +4,14 @@ version: 0.0.5
 homepage: https://github.com/chenmengdi/CCTabBar.git
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  flutter_easyrefresh: ^2.1.7
+  easy_refresh: ^3.3.1
 
 dev_dependencies:
   flutter_test:

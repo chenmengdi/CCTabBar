@@ -2,21 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CCTabBar extends StatefulWidget {
-  final TabController controller;
-  final List<Widget> menuList;
-  final TextStyle labelStyle;
-  final TextStyle unselectedLabelStyle;
-  final Color unselectedLabelColor;
-  final Color labelColor;
-  final Color indicatorColor;
-  final TabBarIndicatorSize indicatorSize;
-  final double indicatorWeight;
-  final EdgeInsetsGeometry indicatorPadding;
-  final bool isScrollable;
-  final ValueChanged<int> onTap;
+  final TabController? controller;
+  final List<Widget>? menuList;
+  final TextStyle? labelStyle;
+  final TextStyle? unselectedLabelStyle;
+  final Color? unselectedLabelColor;
+  final Color? labelColor;
+  final Color? indicatorColor;
+  final TabBarIndicatorSize? indicatorSize;
+  final double? indicatorWeight;
+  final EdgeInsetsGeometry? indicatorPadding;
+  final bool? isScrollable;
+  final ValueChanged<int>? onTap;
   CCTabBar(
-      {@required this.menuList,
-        @required this.controller,
+      {required this.menuList,
+        required this.controller,
         this.labelStyle,
         this.unselectedLabelStyle,
         this.unselectedLabelColor,
@@ -27,7 +27,7 @@ class CCTabBar extends StatefulWidget {
         this.indicatorPadding = EdgeInsets.zero,
         this.isScrollable = true,
         this.onTap,
-        Key key})
+        Key? key})
       :super(key: key);
 
   @override
@@ -49,7 +49,7 @@ class CCTabBarState extends State<CCTabBar> with TickerProviderStateMixin {
     return TabBar(
       onTap: (int index) {
         if (widget.onTap != null) {
-          widget.onTap(index);
+          widget.onTap!(index);
         }
       },
       isScrollable: _getIsScrollable(),
@@ -62,14 +62,14 @@ class CCTabBarState extends State<CCTabBar> with TickerProviderStateMixin {
       indicatorSize: _getIndicatorSize(),
       indicatorWeight: _getIndicatorWeight(),
       indicatorPadding: _getIndicatorPadding(),
-      tabs: widget.menuList,
+      tabs: widget.menuList ?? [],
     );
   }
 
   ///设置选中时的字体颜色
   Color _getLabelColor() {
     if (widget.labelColor != null) {
-      return widget.labelColor;
+      return widget.labelColor!;
     }
     return Color(0xFF201E26);
   }
@@ -77,7 +77,7 @@ class CCTabBarState extends State<CCTabBar> with TickerProviderStateMixin {
   ///设置选中时的字体样式
   TextStyle _getLabelStyle() {
     if (widget.labelStyle != null) {
-      return widget.labelStyle;
+      return widget.labelStyle!;
     }
     return TextStyle(fontWeight: FontWeight.w600, fontSize: 18);
   }
@@ -85,7 +85,7 @@ class CCTabBarState extends State<CCTabBar> with TickerProviderStateMixin {
   ///设置未选中时的字体样式
   TextStyle _getUnselectedLabelStyle() {
     if (widget.unselectedLabelStyle != null) {
-      return widget.unselectedLabelStyle;
+      return widget.unselectedLabelStyle!;
     }
     return TextStyle(fontWeight: FontWeight.w400, fontSize: 16);
   }
@@ -93,7 +93,7 @@ class CCTabBarState extends State<CCTabBar> with TickerProviderStateMixin {
   ///设置未选中时的字体颜色
   Color _getUnselectedLabelColor() {
     if (widget.unselectedLabelColor != null) {
-      return widget.unselectedLabelColor;
+      return widget.unselectedLabelColor!;
     }
     return Color(0xFF929099);
   }
@@ -101,35 +101,35 @@ class CCTabBarState extends State<CCTabBar> with TickerProviderStateMixin {
   ///选中下划线的颜色
   Color _getIndicatorColor() {
     if (widget.indicatorColor != null) {
-      return widget.indicatorColor;
+      return widget.indicatorColor!;
     }
     return Color(0xFF724AE8);
   }
 
   bool _getIsScrollable() {
     if (widget.isScrollable != null) {
-      return widget.isScrollable;
+      return widget.isScrollable!;
     }
     return true;
   }
 
   TabBarIndicatorSize _getIndicatorSize() {
     if (widget.indicatorSize != null) {
-      return widget.indicatorSize;
+      return widget.indicatorSize!;
     }
     return TabBarIndicatorSize.tab;
   }
 
   double _getIndicatorWeight() {
     if (widget.indicatorWeight != null) {
-      return widget.indicatorWeight;
+      return widget.indicatorWeight!;
     }
     return 2.0;
   }
 
   EdgeInsetsGeometry _getIndicatorPadding() {
     if (widget.indicatorPadding != null) {
-      return widget.indicatorPadding;
+      return widget.indicatorPadding!;
     }
     return EdgeInsets.zero;
   }

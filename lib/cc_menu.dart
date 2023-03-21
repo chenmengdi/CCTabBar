@@ -1,65 +1,94 @@
 import 'dart:ui';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import 'cc_tabBar.dart';
 
+class CCMenuController {
+  GlobalKey<_CCMenuPageState> menuState = GlobalKey<_CCMenuPageState>();
+
+  updateMenu() {
+    menuState.currentState!.updateMenu();
+  }
+}
+
 class CCMenuPage extends StatefulWidget {
   ///默认源数据数组
-  final List<String> menuList;
+  final List<String>? menuList;
+
   ///头部
-  final Widget headerWidget;
+  final Widget? headerWidget;
+
   ///底部
-  final Widget bottomWidget;
+  final Widget? bottomWidget;
+
   ///滚动页面列表样式
-  final IndexedWidgetBuilder itemBuilder;
+  final IndexedWidgetBuilder? itemBuilder;
+
   ///默认选中
-  final int selectIndex;
+  final int? selectIndex;
+
   ///点击顶部菜单回调
-  final ValueChanged<int> onTap;
+  final ValueChanged<int>? onTap;
+
   ///下拉刷新事件
-  final onRefresh;
+  final VoidCallback? onRefresh;
+
   ///顶部菜单样式
-  final IndexedWidgetBuilder tabBuilder;
+  final IndexedWidgetBuilder? tabBuilder;
+
   ///菜单个数
-  final int itemCount;
+  final int? itemCount;
+
   ///设置选中时的字体选中样式
-  final TextStyle labelStyle;
+  final TextStyle? labelStyle;
+
   ///设置未选中字体样式
-  final TextStyle unselectedLabelStyle;
+  final TextStyle? unselectedLabelStyle;
+
   ///设置未选中字体颜色
-  final Color unselectedLabelColor;
+  final Color? unselectedLabelColor;
+
   ///设置选中字体颜色
-  final Color labelColor;
+  final Color? labelColor;
+
   ///选中下划线的颜色
-  final Color indicatorColor;
+  final Color? indicatorColor;
+
   ///选中下划线的长度
-  final TabBarIndicatorSize indicatorSize;
+  final TabBarIndicatorSize? indicatorSize;
+
   ///选中下划线的高度
-  final double indicatorWeight;
-  final EdgeInsetsGeometry indicatorPadding;
+  final double? indicatorWeight;
+  final EdgeInsetsGeometry? indicatorPadding;
+
   ///是否滚动 默认true
-  final bool isScrollable;
+  final bool? isScrollable;
+
   /// 菜单栏高度
-  final double tabHeight;
+  final double? tabHeight;
+
   /// 空数据样式
-  final Widget refreshEmptyWidget;
+  final Widget? refreshEmptyWidget;
+
   ///下拉刷新header样式
-  final Header refreshHeaderWidget;
+  final Header? refreshHeaderWidget;
 
   CCMenuPage(
-      {@required this.menuList,
-        @required this.itemBuilder,
-        this.headerWidget,
-        this.bottomWidget,
-        this.selectIndex = 0,
-        this.onTap,
-        this.onRefresh,
-        this.refreshEmptyWidget,
-        this.refreshHeaderWidget,
-        Key key})
-      : this.tabBuilder = null,
+      {required this.menuList,
+      required this.itemBuilder,
+      this.headerWidget,
+      this.bottomWidget,
+      this.selectIndex = 0,
+      this.onTap,
+      this.onRefresh,
+      this.refreshEmptyWidget,
+      this.refreshHeaderWidget,
+      Key? key})
+      : assert(menuList != null && menuList.length > 0),
+        assert(itemBuilder != null),
+        this.tabBuilder = null,
         this.itemCount = null,
         this.labelStyle = null,
         this.unselectedLabelStyle = null,
@@ -74,9 +103,9 @@ class CCMenuPage extends StatefulWidget {
         super(key: key);
 
   CCMenuPage.custom({
-    Key key,
-    @required this.menuList,
-    @required this.itemBuilder,
+    Key? key,
+    required this.menuList,
+    required this.itemBuilder,
     this.headerWidget,
     this.bottomWidget,
     this.selectIndex = 0,
@@ -94,15 +123,17 @@ class CCMenuPage extends StatefulWidget {
     this.tabHeight,
     this.refreshEmptyWidget,
     this.refreshHeaderWidget,
-  })  : this.tabBuilder = null,
+  })  : assert(menuList != null && menuList.length > 0),
+        assert(itemBuilder != null),
+        this.tabBuilder = null,
         this.itemCount = null,
         super(key: key);
 
   CCMenuPage.builder({
-    Key key,
-    @required this.tabBuilder,
-    @required this.itemCount,
-    @required this.itemBuilder,
+    Key? key,
+    required this.tabBuilder,
+    required this.itemCount,
+    required this.itemBuilder,
     this.headerWidget,
     this.bottomWidget,
     this.selectIndex = 0,
@@ -110,7 +141,10 @@ class CCMenuPage extends StatefulWidget {
     this.onRefresh,
     this.refreshEmptyWidget,
     this.refreshHeaderWidget,
-  })  : this.labelStyle = null,
+  })  : assert(itemCount != null && itemCount > 0),
+        assert(tabBuilder != null),
+        assert(itemBuilder != null),
+        this.labelStyle = null,
         this.unselectedLabelStyle = null,
         this.unselectedLabelColor = null,
         this.labelColor = null,
@@ -124,14 +158,14 @@ class CCMenuPage extends StatefulWidget {
         super(key: key);
 
   @override
-  CCMenuPageState createState() => CCMenuPageState();
+  _CCMenuPageState createState() => _CCMenuPageState();
 }
 
-class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
+class _CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
   List _keyList = [];
   List _offsetList = [];
-  TabController _tabController;
-  ScrollController _scrollController;
+  late TabController? _tabController;
+  late ScrollController _scrollController;
   bool _isScrollView = false;
   final GlobalKey headerGlobalKey = GlobalKey();
   double _headerHeight = 0;
@@ -139,7 +173,7 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
   int _itemCount = 0;
   List<Widget> _menuWidgetList = [];
   double _tabHeight = 0;
-  EasyRefreshController _easyRefreshController;
+  late EasyRefreshController _easyRefreshController;
 
   @override
   void initState() {
@@ -151,20 +185,20 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-    _easyRefreshController?.dispose();
+    _easyRefreshController.dispose();
     _tabController?.dispose();
-    _scrollController?.dispose();
+    _scrollController.dispose();
   }
 
   initData() {
+    _easyRefreshController = EasyRefreshController();
     _getItemHeight();
-    _selectNumber = widget.selectIndex;
+    _selectNumber = widget.selectIndex ?? 0;
     _itemCount = _getItemCount();
     _getMenuList();
     _keyList = List.generate(_itemCount, (index) => GlobalKey());
     _tabController = null;
     _tabController = TabController(length: _itemCount, vsync: this);
-    if (_tabController.indexIsChanging) {}
     _scrollController = new ScrollController();
     _scrollController.addListener(() {
       var of = _scrollController.offset;
@@ -180,12 +214,12 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
           var nowOffset = _offsetList[i];
           if (of > (nowOffset - oneOffset + _headerHeight)) {
             isOffset = true;
-            _tabController.animateTo(i);
+            _tabController?.animateTo(i);
             break;
           }
         }
         if (isOffset == false) {
-          _tabController.animateTo(0);
+          _tabController?.animateTo(0);
         }
       }
     });
@@ -196,15 +230,12 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
     });
   }
 
-
   updateMenu() {
     _itemCount = _getItemCount();
     _getMenuList();
     _keyList = List.generate(_itemCount, (index) => GlobalKey());
     _tabController = TabController(length: _itemCount, vsync: this);
-    setState(() {
-
-    });
+    setState(() {});
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _headerHeight = _getHeaderHeigth();
       _subInitState();
@@ -219,40 +250,43 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
       children: [
         _tabHeight == null
             ? Container(
-          width: double.infinity,
-          child: _tabBarWidget(),
-        )
+                width: double.infinity,
+                child: _tabBarWidget(),
+              )
             : Container(
-          height: _tabHeight,
-          width: double.infinity,
-          child: _tabBarWidget(),
-        ),
+                height: _tabHeight,
+                width: double.infinity,
+                child: _tabBarWidget(),
+              ),
         Expanded(
             child: Container(
-              height: MediaQuery.of(context).size.height -
-                  _headerHeight -
-                  MediaQueryData.fromWindow(window).padding.top,
-              child: EasyRefresh(
-                controller: _easyRefreshController,
-                onRefresh: () async {
-                  if (widget.onRefresh != null) {
-                    widget.onRefresh();
-                  }
-                },
-                header: _getDefaultHeader(),
-                emptyWidget: _itemCount == 0 ? _getEmptyWidget() : null,
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
-                    children: [
-                      _getHeaderWidget(),
-                      _getListWidget(),
-                      _getBottomWidget()
-                    ],
+          height: MediaQuery.of(context).size.height -
+              _headerHeight -
+              MediaQueryData.fromWindow(window).padding.top,
+          child: _itemCount == 0
+              ? Center(
+                  child: _getEmptyWidget(),
+                )
+              : EasyRefresh(
+                  controller: _easyRefreshController,
+                  onRefresh: () async {
+                    if (widget.onRefresh != null) {
+                      widget.onRefresh!();
+                    }
+                  },
+                  header: _getDefaultHeader(),
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Column(
+                      children: [
+                        _getHeaderWidget(),
+                        _getListWidget(),
+                        _getBottomWidget()
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ))
+        ))
       ],
     );
   }
@@ -276,45 +310,39 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
           _anmationMenu();
         });
         if (widget.onTap != null) {
-          widget.onTap(index);
+          widget.onTap!(index);
         }
       },
     );
   }
 
   Header _getDefaultHeader() {
-    if (widget.refreshHeaderWidget == null){
-      return ClassicalHeader(
-        infoText: '下拉刷新',
-        refreshedText: '刷新完成',
-        refreshText: '刷新中....',
-        refreshReadyText: '刷新完毕',
-        noMoreText: '',
-        textColor: Colors.black38,
-        bgColor:Colors.white,
-      );
+    if (widget.refreshHeaderWidget == null) {
+      return MaterialHeader();
     }
-    return widget.refreshHeaderWidget;
+    return widget.refreshHeaderWidget!;
   }
 
-  Widget _getEmptyWidget(){
-    if (widget.refreshEmptyWidget == null){
+  Widget _getEmptyWidget() {
+    if (widget.refreshEmptyWidget == null) {
       return SizedBox();
     }
-    return widget.refreshEmptyWidget;
+    return widget.refreshEmptyWidget!;
   }
 
   _getMenuList() {
     List<Widget> widgetList = [];
     if (widget.menuList != null) {
-      for (int i = 0; i < widget.menuList.length; i++) {
+      for (int i = 0; i < widget.menuList!.length; i++) {
         widgetList.add(Tab(
-          child: Text(widget.menuList[i]),
+          child: Text(widget.menuList![i]),
         ));
       }
     } else {
-      for (int i = 0; i < widget.itemCount; i++) {
-        widgetList.add(widget.tabBuilder(context, i));
+      if ((widget.itemCount ?? 0) > 0) {
+        for (int i = 0; i < widget.itemCount!; i++) {
+          widgetList.add(widget.tabBuilder!(context, i));
+        }
       }
     }
     _menuWidgetList = widgetList;
@@ -333,7 +361,7 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
         GlobalKey itemKey = _keyList[index];
         return Container(
           key: itemKey,
-          child: widget.itemBuilder(context, index),
+          child: widget.itemBuilder!(context, index),
         );
       },
     );
@@ -342,13 +370,13 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
   Widget _getHeaderWidget() {
     return Container(
       key: headerGlobalKey,
-      child: widget.headerWidget?? SizedBox(),
+      child: widget.headerWidget ?? SizedBox(),
     );
   }
 
   Widget _getBottomWidget() {
     if (widget.bottomWidget != null) {
-      return widget.bottomWidget;
+      return widget.bottomWidget!;
     }
     return SizedBox();
   }
@@ -366,38 +394,38 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
     if (buildContext == null) {
       return 0;
     }
-    final RenderBox box = buildContext.findRenderObject();
+    final RenderBox box = buildContext.findRenderObject() as RenderBox;
     final topLeftPosition = box.localToGlobal(Offset.zero);
     return topLeftPosition.dy;
   }
 
   int _getItemCount() {
     if (widget.itemCount == null && widget.tabBuilder == null) {
-      return widget.menuList.length;
+      return widget.menuList!.length;
     }
-    return widget.itemCount;
+    return widget.itemCount!;
   }
 
   _getItemHeight() {
     if (widget.tabBuilder == null && widget.itemCount == null) {
       if (widget.tabHeight != null) {
-        _tabHeight = widget.tabHeight;
+        _tabHeight = widget.tabHeight!;
       } else {
         _tabHeight = 30;
       }
     } else {
-      _tabHeight = null;
+      _tabHeight = 0;
     }
   }
 
   _anmationMenu() {
     if (_selectNumber == 0) {
       _isScrollView = false;
-      _tabController.animateTo(_selectNumber);
+      _tabController?.animateTo(_selectNumber);
       _scrollController.jumpTo(0);
     } else {
       _isScrollView = false;
-      _tabController.animateTo(_selectNumber);
+      _tabController?.animateTo(_selectNumber);
       var oneOffset = _offsetList[0];
       var nowOffset = _offsetList[_selectNumber] - oneOffset + _headerHeight;
       if (nowOffset <= _scrollController.position.maxScrollExtent) {
@@ -418,7 +446,7 @@ class CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
   }
 
   double _getHeaderHeigth() {
-    double containerHeight = headerGlobalKey.currentContext.size.height;
-    return containerHeight;
+    double? containerHeight = headerGlobalKey.currentContext?.size?.height;
+    return containerHeight ?? 0;
   }
 }
