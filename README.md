@@ -7,7 +7,6 @@
 # 使用例子
 
 ```
-GlobalKey<CCMenuPageState> menuState = GlobalKey<CCMenuPageState>();
 
   List<Color> colorList = [
     Color(0xFF969AF9),
@@ -147,7 +146,7 @@ return CCMenuPage.custom(
       GestureDetector(
              onTap: (){
               menuList.add('新增菜单');
-              menuState.currentState.updateMenu();
+             CCMenuController().updateMenu();
               setState(() {
 
               });
