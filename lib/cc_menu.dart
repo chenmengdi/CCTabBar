@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'cc_tabBar.dart';
@@ -248,7 +247,7 @@ class _CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
     // TODO: implement build
     return Column(
       children: [
-        _tabHeight == null
+        _tabHeight == 0
             ? Container(
                 width: double.infinity,
                 child: _tabBarWidget(),
@@ -390,7 +389,7 @@ class _CCMenuPageState extends State<CCMenuPage> with TickerProviderStateMixin {
     }
   }
 
-  double getY(BuildContext buildContext) {
+  double getY(BuildContext? buildContext) {
     if (buildContext == null) {
       return 0;
     }

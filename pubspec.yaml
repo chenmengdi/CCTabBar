@@ -1,6 +1,6 @@
 name: link_scroll_menu
 description: Click the menu, scroll the corresponding position of the page, and scroll the page.
-version: 0.0.5
+version: 0.0.6
 homepage: https://github.com/chenmengdi/CCTabBar.git
 
 environment:
